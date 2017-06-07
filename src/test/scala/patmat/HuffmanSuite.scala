@@ -50,11 +50,21 @@ class HuffmanSuite extends FunSuite {
     assert(combine(leaflist) === List(Fork(Leaf('e',1),Leaf('t',2),List('e', 't'),3), Leaf('x',4)))
   }
 
+  test("Until only one tree") {
+    val leafList = makeOrderedLeafList(times("hello my name is Ollie".toList))
+    val oneTree = until(singleton,combine)(leafList)
+    assert(oneTree.length == 1)
+  }
+
 
   test("decode and encode a very short text should be identity") {
     new TestTrees {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
+  }
+
+  test("Decode the secret message") {
+    println(decodedSecret.foldRight("")((x: Char, y: String) => x+y))
   }
 
 }
