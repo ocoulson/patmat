@@ -59,12 +59,31 @@ class HuffmanSuite extends FunSuite {
 
   test("decode and encode a very short text should be identity") {
     new TestTrees {
-      assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
+      assert(decode(t1, encode(t1)("abbba".toList)) === "abbba".toList)
     }
   }
 
   test("Decode the secret message") {
     println(decodedSecret.foldRight("")((x: Char, y: String) => x+y))
+  }
+
+
+  test("Convert a CodeTree into a CodeTable") {
+    val tree = Fork(Fork(Leaf('a',1),Leaf('y', 2), List('a','y'), 3),Fork(Leaf('b',33), Leaf('c',45), List('b', 'c'), 33+45), List('a', 'y', 'b', 'c'), 33+45+1+2)
+
+    val codeTable = convert(tree)
+
+    assert(codeTable.contains(('a', List(0,0))))
+    assert(codeTable.contains(('y', List(0,1))))
+    assert(codeTable.contains(('b', List(1,0))))
+    assert(codeTable.contains(('c', List(1,1))))
+
+  }
+
+  test("QuickEncode encodes a message using a CodeTable") {
+    new TestTrees {
+      assert(decode(t1, quickEncode(t1)("abbba".toList)) === "abbba".toList)
+    }
   }
 
 }
